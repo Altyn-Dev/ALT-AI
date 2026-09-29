@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ALT AI — Workspace</title>
+<style>
+:root{--bg:#090b18;--surface:#11162b;--surface2:#171e38;--stroke:#303a62;--text:#eef2ff;--muted:#929cbe;--purple:#8c5cf6;--blue:#4c8dff;--cyan:#50dfe0}
+*{box-sizing:border-box}body{margin:0;overflow:hidden;background:radial-gradient(ellipse at 62% 35%,#28245b 0,transparent 45%),linear-gradient(120deg,#080b19,#11152b 60%,#15132d);color:var(--text);font:14px Inter,system-ui,Arial,sans-serif;min-height:100vh}
+.shell{display:flex;height:100vh;height:100dvh;min-height:0;overflow:hidden}.sidebar{width:245px;padding:19px 13px;background:#0b1022ed;border-right:1px solid #ffffff12;display:flex;flex-direction:column;gap:18px}.brand{display:flex;align-items:center;gap:10px;font-size:19px;font-weight:800;padding:4px 8px 12px}.brandmark{width:31px;height:31px;border-radius:10px;background:linear-gradient(140deg,#54e1e2,#8b5cf6);display:grid;place-items:center;color:#11142b;font-weight:900}.new{background:linear-gradient(100deg,#7650d8,#4c64c7);border:0;border-radius:10px;padding:11px;color:white;text-align:left;font-weight:650;cursor:pointer;box-shadow:0 8px 20px #5b4cc044}.section{font-size:10px;letter-spacing:1.3px;text-transform:uppercase;color:#697597;padding:4px 10px}.nav{display:grid;gap:4px}.chatlist{max-height:45vh;overflow-y:auto}.chatitem{display:flex;align-items:center;gap:5px}.chatitem .openchat{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:12px}.chatitem.current .openchat{background:#20294b;color:#fff}.chatitem .delchat{border:0;background:transparent;color:#7581a1;cursor:pointer;padding:5px;border-radius:6px}.chatitem .delchat:hover{background:#542b45;color:#ffb8c7}.nav button{border:0;background:transparent;color:#9ba6c7;text-align:left;padding:10px;border-radius:9px;cursor:pointer}.nav button.active,.nav button:hover{background:#20294b;color:#fff}.nav .ico{display:inline-block;width:25px;color:#b6a1ff}.sidefoot{margin-top:auto;color:#7480a2;font-size:11px;padding:12px;border-top:1px solid #ffffff12;line-height:1.7}.main{flex:1;min-width:0;min-height:0;height:100%;display:flex;flex-direction:column;overflow:hidden}.topbar{height:58px;flex:0 0 58px;border-bottom:1px solid #ffffff12;display:flex;align-items:center;justify-content:space-between;padding:0 24px;background:#0c1020a8}.crumb{font-size:12px;color:#7f8bad}.status{border:1px solid #ffffff18;border-radius:30px;padding:7px 11px;color:#a8f3dc;font-size:11px}.stage{width:min(950px,100%);margin:0 auto;padding:18px 28px 10px;display:flex;flex-direction:column;align-items:center;flex:1;min-height:0;height:auto;overflow:hidden}.hello{text-align:center;margin:8px 0 16px;flex:0 0 auto}.core{width:62px;height:62px;border-radius:20px;margin:0 auto 16px;display:grid;place-items:center;background:radial-gradient(circle at 35% 20%,#8bfaff,#3782ff 42%,#9b55ee 78%);box-shadow:0 0 40px #3e8dff66;font-size:27px}.hello h1{font-size:clamp(27px,4vw,38px);margin:0 0 9px;letter-spacing:-1px}.hello p{color:#a1aac6;margin:0;font-size:14px}.modes{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:min(720px,100%);margin:4px auto 12px;flex:0 0 auto}.mode{border:1px solid #ffffff18;background:linear-gradient(145deg,#20294a,#171e38);border-radius:13px;color:#e9edff;padding:14px 8px 12px;cursor:pointer;transition:.18s}.mode:hover,.mode.selected{border-color:#7d75ff;box-shadow:0 0 18px #7c65ff2b;background:linear-gradient(145deg,#344b91,#282252)}.mode .symbol{width:30px;height:30px;border-radius:9px;background:#ffffff13;display:grid;place-items:center;margin:0 auto 8px;font-size:15px}.mode span{font-size:11px;color:#dbe3ff}.composer{width:min(720px,100%);flex:0 0 auto;position:relative;bottom:auto;z-index:5;border:1px solid #46527f;background:#151c35f5;backdrop-filter:blur(16px);border-radius:17px;padding:13px;box-shadow:0 18px 45px #0006}.composehead{font-size:11px;color:#8e9aba;margin:0 0 8px 3px}.composer textarea{width:100%;height:64px;resize:vertical;background:transparent;border:0;outline:0;color:white;font:14px/1.6 inherit;font-family:inherit;padding:5px}.composer textarea::placeholder{color:#7884a6}.tools{display:flex;align-items:center;gap:7px;flex-wrap:wrap}.chip{border:1px solid #ffffff18;background:#202947;color:#aebce2;border-radius:7px;padding:6px 9px;font-size:10px;cursor:pointer}.chip:hover{border-color:#7f74ee;color:#fff}.spacer{flex:1}.send{border:0;border-radius:9px;background:linear-gradient(135deg,#6d7eff,#8c5cf6);color:white;padding:9px 14px;font-weight:700;cursor:pointer}.note{font-size:10px;color:#687495;text-align:center;margin-top:10px}.response{width:min(720px,100%);margin:0 auto 10px;display:flex;flex-direction:column;gap:9px;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:12px 3px 8px;scrollbar-width:thin}.bubble{padding:13px 15px;border-radius:12px;max-width:90%;white-space:pre-wrap;line-height:1.6;align-self:flex-start}.bubble.user{align-self:flex-end;background:#5149a7}.bubble.bot{align-self:flex-start;background:#ffffff0c;border:1px solid #ffffff12;color:#e6eaff}.quickrow{display:flex;flex:0 0 auto;gap:7px;justify-content:center;flex-wrap:wrap;margin:9px 0 0}.quickrow button{background:#121a31;border:1px solid #ffffff14;color:#98a5c7;border-radius:20px;padding:8px 12px;font-size:11px;cursor:pointer}
+@media(max-width:760px){.stage{height:auto;min-height:0;padding:12px 12px 8px}.sidebar{width:62px;padding:15px 7px}.brand{padding:3px 8px}.brandname,.newtxt,.section,.nav .label,.sidefoot{display:none}.new{font-size:0;text-align:center;padding:11px}.new:after{content:"＋";font-size:18px}.nav button{text-align:center;font-size:0;padding:12px 5px}.nav .ico{font-size:17px;width:auto}.topbar{padding:0 12px}.stage{padding:22px 12px}.modes{gap:5px}.mode{padding:10px 2px}.mode span{font-size:10px}.mode .symbol{margin-bottom:5px}.hello{margin:22px 0}.hello h1{font-size:27px}.composer{padding:10px}.quickrow{margin-top:13px}}
+@media(max-height:700px){.hello{margin:2px 0 8px}.core{width:42px;height:42px;margin-bottom:8px}.hello p{display:none}.modes{margin-bottom:7px}.quickrow{display:none}.note{margin-top:5px}}@media(max-width:390px){.sidebar{width:52px}.modes{grid-template-columns:repeat(5,minmax(0,1fr))}.mode span{font-size:9px}.mode .symbol{width:25px;height:25px}}
+
+/* ALT AI custom violet scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #8b5cf6 #11162b;
+}
+*::-webkit-scrollbar {
+  width: 9px;
+  height: 9px;
+}
+*::-webkit-scrollbar-track {
+  background: #11162b;
+  border-radius: 12px;
+}
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #b18aff, #7543d8);
+  border: 2px solid #11162b;
+  border-radius: 12px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #c6a8ff, #9664f2);
+}
+
+
+/* Smooth message entrance */
+@keyframes messageEnter {
+  from { opacity: 0; transform: translateY(12px) scale(.985); filter: blur(3px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+.bubble {
+  animation: messageEnter .32s cubic-bezier(.2,.75,.25,1) both;
+  will-change: transform, opacity;
+}
+@media (prefers-reduced-motion: reduce) {
+  .bubble { animation: none; }
+}
+
+</style></head><body><div class="shell">
+<aside class="sidebar"><div class="brand"><div class="brandmark">A</div><span class="brandname">ALT AI</span></div><button class="new" onclick="newChat()"><span class="newtxt">＋　Новый чат</span></button><div><div class="section">Workspace</div><div class="nav"><button class="active"><span class="ico">◉</span><span class="label">Чат</span></button><button onclick="choose('Помоги мне составить план учёбы на неделю.')"><span class="ico">▦</span><span class="label">Задачи</span></button><button onclick="choose('Помоги придумать дизайн учебного проекта.')"><span class="ico">✧</span><span class="label">Дизайн</span></button><button onclick="choose('Объясни пример кода простыми словами.')"><span class="ico">⌘</span><span class="label">Код</span></button><button onclick="choose('Помоги исследовать тему и выдели основные факты.')"><span class="ico">⌕</span><span class="label">Исследование</span></button></div></div><div><div class="section">История чатов</div><div id="chatList" class="nav chatlist"></div><button class="chip" style="width:100%;margin-top:8px" onclick="newChat()">＋ Новый диалог</button></div><div class="sidefoot">✦ ALT AI<br>Учись. Создавай. Развивайся.</div></aside>
+<main class="main"><header class="topbar"><div class="crumb">ALT AI　/　Рабочее пространство</div><div class="status">● Gemini готов</div></header><section class="stage">
+<div class="hello"><div class="core">✦</div><h1>Добро пожаловать в <span style="background:linear-gradient(90deg,#74e6e3,#b18aff);color:transparent;background-clip:text">ALT AI</span></h1><p>Твой универсальный AI-помощник для учёбы и идей.</p></div>
+<div style="width:min(720px,100%);text-align:right;margin:0 auto 10px"><a href="quiz.html" style="color:#c4b5fd;text-decoration:none;border:1px solid #ffffff22;border-radius:9px;padding:8px 12px;display:inline-block">☑ Открыть тесты ↗</a></div><div class="modes"><button class="mode selected" onclick="setMode(this,'Чат')"><div class="symbol">◉</div><span>Чат</span></button><button class="mode" onclick="setMode(this,'Репетитор')"><div class="symbol">🎓</div><span>Репетитор</span></button><button class="mode" onclick="setMode(this,'Задания')"><div class="symbol">▦</div><span>Задания</span></button><button class="mode" onclick="setMode(this,'Тесты')"><div class="symbol">☑</div><span>Тесты</span></button><button class="mode" onclick="setMode(this,'Код')"><div class="symbol">⌘</div><span>Код</span></button></div>
+<div class="response" id="messages"></div>
+<div class="composer"><div class="composehead" id="modeLabel">✦　Спроси ALT AI</div><textarea id="question" placeholder="Например: объясни тему циклов в JavaScript простыми словами..."></textarea><div class="tools"><button class="chip" onclick="choose('Объясни тему простыми словами и приведи пример.')">✧ Объяснить</button><button class="chip" onclick="choose('Разбери моё задание пошагово.')">▤ Разобрать</button><button class="chip" onclick="choose('Создай тест из 5 вопросов для проверки знаний.')">◈ Тест</button><span class="spacer"></span><button class="send" id="send" onclick="send()">Отправить ↗</button></div></div>
+<div class="note">Enter — отправить　·　Shift + Enter — новая строка</div><div class="quickrow"><button onclick="setMode(document.querySelectorAll('.mode')[1],'Репетитор');choose('Научи меня новой теме с нуля. Сначала объясни простыми словами, затем задай один вопрос, чтобы проверить понимание.')">🎓 Начать урок</button><button onclick="setMode(document.querySelectorAll('.mode')[3],'Тесты');choose('Проведи тест из 5 вопросов по теме, которую я назову. Задавай по одному вопросу и жди мой ответ.')">☑ Пройти тест</button><button onclick="setMode(document.querySelectorAll('.mode')[2],'Задания');choose('Помоги решить моё задание пошагово, объясняя ход решения.')">▤ Разобрать задание</button></div></section></main></div>
+<script>
+const input=document.getElementById('question'),messages=document.getElementById('messages'),sendBtn=document.getElementById('send'),chatList=document.getElementById('chatList');
+let mode='Чат';
+let chats=[];
+let activeId=null;
+try{chats=JSON.parse(localStorage.getItem('altai_chats')||'[]');if(!Array.isArray(chats))chats=[]}catch(e){chats=[]}
+function persist(){localStorage.setItem('altai_chats',JSON.stringify(chats))}
+function id(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+function current(){return chats.find(c=>c.id===activeId)}
+function renderList(){
+ chatList.innerHTML='';
+ chats.slice().reverse().forEach(c=>{
+  const row=document.createElement('div');row.className='chatitem'+(c.id===activeId?' current':'');
+  const open=document.createElement('button');open.className='openchat';open.textContent='▤　'+c.title;open.title=c.title;open.onclick=()=>switchChat(c.id);
+  const del=document.createElement('button');del.className='delchat';del.textContent='×';del.title='Удалить чат';del.onclick=()=>deleteChat(c.id);
+  row.append(open,del);chatList.appendChild(row);
+ });
+}
+function renderMessages(){
+ messages.innerHTML='';
+ const c=current();
+ if(!c||!c.messages.length){add('Привет! Я ALT AI 👋 Чем займёмся сегодня?','bot');return}
+ c.messages.forEach(m=>add(m.text,m.role));
+}
+function createChat(){const c={id:id(),title:'Новый чат',messages:[]};chats.push(c);activeId=c.id;persist();renderList();renderMessages()}
+function newChat(){createChat();input.value='';input.focus()}
+function switchChat(chatId){activeId=chatId;renderList();renderMessages();input.value=''}
+function deleteChat(chatId){
+ chats=chats.filter(c=>c.id!==chatId);
+ if(activeId===chatId)activeId=chats.length?chats[chats.length-1].id:null;
+ if(!activeId&&chats.length===0){createChat();return}
+ persist();renderList();renderMessages();
+}
+function choose(t){input.value=t;input.focus()}
+function setMode(el,m){mode=m;document.querySelectorAll('.mode').forEach(x=>x.classList.remove('selected'));el.classList.add('selected');document.getElementById('modeLabel').textContent='✦　Режим: '+m;const hints={Чат:'Спроси ALT AI',Репетитор:'AI-репетитор: объяснение и проверка понимания',Задания:'Разберём задание по шагам',Тесты:'Тест: вопросы по одному, затем проверка',Код:'Помощник по программированию'};input.placeholder=hints[m]||'Напиши свой вопрос...'}
+function add(t,c){let d=document.createElement('div');d.className='bubble '+c;d.textContent=t;messages.appendChild(d);messages.scrollTop=messages.scrollHeight;return d}
+function saveMessage(role,text){let c=current();if(!c){createChat();c=current()}c.messages.push({role,text});if(c.title==='Новый чат'&&role==='user'){c.title=text.length>28?text.slice(0,28)+'…':text}persist();renderList()}
+async function send(){
+ let q=input.value.trim();if(!q)return;
+ if(!current())createChat();
+ saveMessage('user',q);add(q,'user');input.value='';sendBtn.disabled=true;
+ let wait=add('ALT AI думает…','bot');
+ try{
+  const modeRules={
+ 'Репетитор':'Ты терпеливый AI-репетитор. Объясняй с нуля простыми словами, небольшими шагами и с понятным примером. Не перегружай. После объяснения задай один короткий вопрос, чтобы проверить понимание, и дождись ответа ученика. Если ученик ошибся, мягко объясни почему и дай подсказку.',
+ 'Задания':'Помогай учиться, а не просто списывать. Разбери условие, покажи решение по шагам, объясни логику каждого шага и в конце предложи похожее задание для самостоятельной практики.',
+ 'Тесты':'Проведи учебный тест. Если тема не указана, сначала спроси тему и уровень. Задавай только один вопрос за сообщение, жди ответ ученика, затем сообщай верно ли и коротко объясняй. После 5 вопросов подведи итог и укажи темы для повторения.',
+ 'Код':'Ты наставник по программированию. Объясняй код простыми словами, находи ошибки, показывай исправленный вариант и поясняй, почему он работает. Учитывай, что пользователь новичок.'
+};
+const prompt=mode==='Чат'?q:`${modeRules[mode]||''}\n\nСообщение ученика: ${q}`;
+let r=await fetch('/webhook',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({queryResult:{queryText:prompt}})});
+  let data=await r.json();let answer=data.fulfillmentText||'Ответ не получен.';wait.textContent=answer;saveMessage('bot',answer);
+ }catch(e){wait.textContent='Не удалось подключиться. Проверь, запущен ли сервер.';saveMessage('bot',wait.textContent)}
+ finally{sendBtn.disabled=false;messages.scrollTop=messages.scrollHeight}
+}
+input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send()}});
+if(chats.length){activeId=chats[chats.length-1].id;renderList();renderMessages()}else{createChat()}
+</script></body></html>

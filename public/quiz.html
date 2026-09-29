@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALT AI — Тесты</title>
+<style>
+:root{color-scheme:dark;--bg:#0d0b16;--panel:#171323;--line:#302744;--purple:#9b72f2;--text:#f5f1ff;--muted:#aaa0bb;--good:#43d49b;--bad:#ff7187}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#211638 0,#0d0b16 55%);color:var(--text);font:15px/1.5 Inter,system-ui,Arial,sans-serif;min-height:100vh}
+main{width:min(760px,calc(100% - 28px));margin:34px auto 60px}.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}.brand{font-weight:800;letter-spacing:.4px}.brand span{color:var(--purple)}a{color:#c4aaff;text-decoration:none}.card{background:rgba(23,19,35,.96);border:1px solid var(--line);border-radius:20px;padding:26px;box-shadow:0 18px 60px #0005}h1{font-size:clamp(25px,5vw,36px);line-height:1.15;margin:0 0 8px}p.sub{color:var(--muted);margin:0 0 24px}.fields{display:grid;grid-template-columns:1fr 1fr;gap:14px}.field label{display:block;color:var(--muted);font-size:13px;margin-bottom:7px}select{width:100%;padding:13px;background:#100d19;color:var(--text);border:1px solid var(--line);border-radius:11px;font:inherit;outline:none}button{border:0;border-radius:12px;background:linear-gradient(135deg,#a17bf7,#7650d5);color:white;font-weight:700;font:inherit;padding:13px 18px;cursor:pointer}button:disabled{opacity:.55;cursor:wait}.primary{width:100%;margin-top:18px}.hidden{display:none!important}.status{color:var(--muted);margin-top:13px;text-align:center;min-height:22px}.progress{height:6px;background:#302744;border-radius:9px;overflow:hidden;margin:0 0 20px}.progress span{display:block;height:100%;background:var(--purple);width:0;transition:width .25s}.qhead{display:flex;justify-content:space-between;color:var(--muted);font-size:13px;margin-bottom:10px}.question{font-size:20px;font-weight:700;margin:0 0 18px}.option{display:flex;align-items:flex-start;gap:11px;width:100%;text-align:left;margin:9px 0;padding:13px 15px;background:#100d19;border:1px solid var(--line);border-radius:12px;color:var(--text)}.option.selected{border-color:var(--purple);background:#281d3d}.option.correct{border-color:var(--good);background:#123126}.option.wrong{border-color:var(--bad);background:#351923}.letter{display:grid;place-items:center;flex:0 0 27px;height:27px;border-radius:8px;background:#302744;color:#d6c5ff;font-size:12px;font-weight:700}.actions{display:flex;justify-content:space-between;gap:10px;margin-top:20px}.secondary{background:#302744}.explanation{margin-top:16px;padding:14px;border-radius:12px;background:#100d19;color:#c9bfd8}.result{text-align:center}.score{font-size:54px;font-weight:800;color:#c4aaff;margin:12px}.review{margin-top:18px;text-align:left;border-top:1px solid var(--line);padding-top:12px}.review-item{padding:13px 0;border-bottom:1px solid var(--line)}.review-item b{display:block;margin-bottom:5px}.muted{color:var(--muted)}@media(max-width:540px){.card{padding:19px}.fields{grid-template-columns:1fr}.question{font-size:18px}.top{margin-top:10px}}
+</style>
+</head>
+<body>
+<main>
+  <div class="top"><div class="brand">ALT <span>AI</span> · ТЕСТЫ</div><a href="/">← Вернуться в чат</a></div>
+  <section class="card" id="setup">
+    <h1>Проверь свои знания</h1>
+    <p class="sub">Создай новый тест с помощью AI и разбери ошибки после прохождения.</p>
+    <div class="fields">
+      <div class="field"><label for="subject">Предмет</label><select id="subject"><option>Информатика</option><option>Математика</option><option>Физика</option><option>Английский</option></select></div>
+      <div class="field"><label for="difficulty">Сложность</label><select id="difficulty"><option>Лёгкая</option><option selected>Средняя</option><option>Сложная</option></select></div>
+      <div class="field"><label for="count">Количество вопросов</label><select id="count"><option value="5">5 вопросов</option><option value="10">10 вопросов</option></select></div>
+    </div>
+    <button class="primary" id="start">✨ Сгенерировать тест</button>
+    <div class="status" id="status" role="status"></div>
+  </section>
+  <section class="card hidden" id="quiz">
+    <div class="progress"><span id="bar"></span></div>
+    <div class="qhead"><span id="counter"></span><span id="subjectTag"></span></div>
+    <h2 class="question" id="question"></h2>
+    <div id="options"></div>
+    <div class="explanation hidden" id="explanation"></div>
+    <div class="actions"><button class="secondary" id="back">← Назад</button><button id="next" disabled>Ответить →</button></div>
+  </section>
+  <section class="card hidden result" id="result">
+    <h1>Тест завершён!</h1><div class="score" id="score"></div><p id="summary" class="sub"></p>
+    <button id="again">Пройти новый тест</button>
+    <div class="review" id="review"></div>
+  </section>
+</main>
+<script>
+const $=id=>document.getElementById(id);
+let questions=[],answers=[],index=0,subjectNow="";
+$("start").addEventListener("click",async()=>{
+  const btn=$("start"); btn.disabled=true; $("status").textContent="Gemini составляет вопросы…";
+  subjectNow=$("subject").value;
+  try{
+    const r=await fetch("/generate-quiz",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({subject:subjectNow,difficulty:$("difficulty").value,count:Number($("count").value)})});
+    const data=await r.json();
+    if(!r.ok) throw new Error(data.error||"Ошибка генерации");
+    if(!Array.isArray(data.questions)||!data.questions.length) throw new Error("AI вернул пустой тест");
+    questions=data.questions;answers=Array(questions.length).fill(null);index=0;
+    $("setup").classList.add("hidden");$("result").classList.add("hidden");$("quiz").classList.remove("hidden");render();
+  }catch(e){$("status").textContent=e.message+" Проверь, запущен ли сервер и доступен ли API."; }
+  finally{btn.disabled=false;}
+});
+function render(){
+  const q=questions[index];$("counter").textContent=`Вопрос ${index+1} из ${questions.length}`;$("subjectTag").textContent=subjectNow;$("bar").style.width=`${(index+1)/questions.length*100}%`;$("question").textContent=q.question;
+  $("options").innerHTML="";
+  q.options.forEach((opt,i)=>{const b=document.createElement("button");b.className="option"+(answers[index]===i?" selected":"");b.innerHTML=`<span class="letter">${"ABCD"[i]}</span><span></span>`;b.querySelector("span:last-child").textContent=opt;b.addEventListener("click",()=>{answers[index]=i;render();});$("options").appendChild(b);});
+  $("back").disabled=index===0;$("back").style.opacity=index===0?".35":"1";$("next").disabled=answers[index]===null;$("next").textContent=index===questions.length-1?"Завершить тест":"Ответить →";$("explanation").classList.add("hidden");
+}
+$("back").addEventListener("click",()=>{if(index>0){index--;render();}});
+$("next").addEventListener("click",()=>{
+  if(answers[index]===null)return;
+  if(index<questions.length-1){index++;render();}else finish();
+});
+function finish(){
+  $("quiz").classList.add("hidden");$("result").classList.remove("hidden");
+  const correct=questions.filter((q,i)=>q.correctAnswer===answers[i]).length;
+  $("score").textContent=`${correct} / ${questions.length}`;
+  $("summary").textContent=`Правильных ответов: ${Math.round(correct/questions.length*100)}%. Ниже — разбор каждого вопроса.`;
+  $("review").innerHTML="";
+  questions.forEach((q,i)=>{
+    const item=document.createElement("div");item.className="review-item";
+    const title=document.createElement("b");title.textContent=`${i+1}. ${q.question}`;
+    const result=document.createElement("div");result.textContent=(answers[i]===q.correctAnswer?"✓ Верно":"✕ Неверно")+". Правильный ответ: "+q.options[q.correctAnswer];result.style.color=answers[i]===q.correctAnswer?"var(--good)":"var(--bad)";
+    const expl=document.createElement("div");expl.className="muted";expl.textContent=q.explanation;
+    item.append(title,result,expl);$("review").appendChild(item);
+  });
+}
+$("again").addEventListener("click",()=>{$("result").classList.add("hidden");$("setup").classList.remove("hidden");$("status").textContent="";});
+</script>
+</body>
+</html>
